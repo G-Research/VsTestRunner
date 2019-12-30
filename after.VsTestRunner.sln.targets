@@ -1,0 +1,53 @@
+<Project>
+  <Target Name="GetTestAssemblies">
+    <ItemGroup>
+      <VsTestRunnerTests Include=".\tests\VsTestRunner.Tests\bin\$(Configuration)\*\publish\VsTestRunner.Tests.dll;" />
+      <TestAssembies Include="@(VsTestRunnerTests)" />
+      <TestAssembies Include=".\tests\VsTestRunner.Core.Tests\bin\$(Configuration)\*\publish\VsTestRunner.Core.Tests.dll;" />
+      <NetCore5TestAssemblies Include=".\tests\VsTestRunner.Core.Tests\bin\$(Configuration)\net5.0\VsTestRunner.Core.Tests.dll;" />
+      <NetCore5TestAssemblies Include=".\tests\VsTestRunner.Tests\bin\$(Configuration)\net5.0\VsTestRunner.Tests.dll;" />
+      <NetCore6TestAssemblies Include=".\tests\VsTestRunner.Core.Tests\bin\$(Configuration)\net6.0\VsTestRunner.Core.Tests.dll;" />
+      <NetCore6TestAssemblies Include=".\tests\VsTestRunner.Tests\bin\$(Configuration)\net6.0\VsTestRunner.Tests.dll;" />
+      <NetCore7TestAssemblies Include=".\tests\VsTestRunner.Core.Tests\bin\$(Configuration)\net7.0\VsTestRunner.Core.Tests.dll;" />
+      <NetCore7TestAssemblies Include=".\tests\VsTestRunner.Tests\bin\$(Configuration)\net7.0\VsTestRunner.Tests.dll;" />
+      <NetCore5And6Assemblies Include="@(NetCore5TestAssemblies)" />
+      <NetCore5And6Assemblies Include="@(NetCore6TestAssemblies)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="RunDockerTest" DependsOnTargets="GetTestAssemblies">
+
+    <!-- Write test results to separate folder which needs to be mounted into the docker image-->
+    <Exec Command="dotnet run --project $(MSBuildThisFileDirectory)src/VsTestRunner/VsTestRunner.csproj --framework net5.0 -- --test-assemblies @(NetCore5TestAssemblies, ',') --test-platform x64 --docker-image mcr.microsoft.com/dotnet/sdk:6.0.408-focal-amd64 --verbosity Debug --environment-variables DOTNET_CLI_TELEMETRY_OPTOUT=1 --metrics-file test.metrics --code-coverage-collector Coverlet --results-directory $(SolutionDir)/TestResults/Docker" />
+
+    <Message Importance="High" Text="Running test in Docker for test assemblies @(NetCore6TestAssemblies, ',')" />
+	  <Exec Command="dotnet run --project $(MSBuildThisFileDirectory)src/VsTestRunner/VsTestRunner.csproj --framework net6.0 -- --test-assemblies @(NetCore6TestAssemblies, ',') --test-platform x64 --docker-image mcr.microsoft.com/dotnet/sdk:6.0.408-focal-amd64 --verbosity Debug --environment-variables DOTNET_CLI_TELEMETRY_OPTOUT=1 --metrics-file test.metrics" />
+
+    <Message Importance="High" Text="Running test in Docker for test assemblies @(NetCore5And6Assemblies, ',')" />
+    <Exec Command="dotnet run --project $(MSBuildThisFileDirectory)src/VsTestRunner/VsTestRunner.csproj --framework net6.0 -- --test-assemblies @(NetCore5And6Assemblies, ',') --test-platform x64 --docker-image net5.0=mcr.microsoft.com/dotnet/sdk:5.0.407-focal-amd64 net6.0=mcr.microsoft.com/dotnet/sdk:6.0.408-focal-amd64 --verbosity Debug --environment-variables DOTNET_CLI_TELEMETRY_OPTOUT=1 --metrics-file test.metrics" />
+
+    <Message Importance="High" Text="Running test in Docker for test assemblies @(NetCore7Assemblies, ',')" />
+    <Exec Command="dotnet run --project $(MSBuildThisFileDirectory)src/VsTestRunner/VsTestRunner.csproj --framework net7.0 -- --test-assemblies @(NetCore7TestAssemblies, ',') --test-platform x64 --docker-image mcr.microsoft.com/dotnet/sdk:7.0.203-jammy --verbosity Debug --environment-variables DOTNET_CLI_TELEMETRY_OPTOUT=1 --metrics-file test.metrics" />
+  </Target>
+
+  <Target Name="RunTestRunnerInDocker" DependsOnTargets="GetTestAssemblies">
+    <Message Importance="High" Text="Running VsTestRunner in Docker" />
+    <Exec Command="docker run -e &quot;DOTNET_CLI_HOME=/workdir&quot; -e &quot;DOTNET_CLI_TELEMETRY_OPTOUT=1&quot; --rm --workdir /workdir -v &quot;$(MSBuildThisFileDirectory):/workdir&quot; --entrypoint dotnet mcr.microsoft.com/dotnet/sdk:7.0.203-jammy /workdir/src/VsTestRunner/bin/$(Configuration)/net7.0/VsTestRunner.dll --test-assemblies /workdir/tests/VsTestRunner.Tests/bin/$(Configuration)/net7.0/VsTestRunner.Tests.dll --test-platform x64" />
+  </Target>
+
+  <Target Name="SmokeTest" DependsOnTargets="GetTestAssemblies">
+
+    <Message Importance="High" Text="Running tests through VsTestRunner for @(TestAssembies, ',')" />
+
+    <Exec Command="dotnet run --project $(MSBuildThisFileDirectory)src/VsTestRunner/VsTestRunner.csproj --framework net6.0 --no-restore -- --test-assemblies @(TestAssembies, ',') --test-platform x64  --session-timeout 0.5 --no-metrics --code-coverage-collector Coverlet --results-directory ./TestResults/Windows --exclude-categories NotWorking " WorkingDirectory="$(SolutionDir)" />
+
+    <Message Importance="High" Text="Running tests through VsTestRunner for @(VsTestRunnerTests, ',')" />
+    <Exec Command="dotnet run --project $(MSBuildThisFileDirectory)src/VsTestRunner/VsTestRunner.csproj --framework net6.0 --no-restore -- --test-assemblies @(VsTestRunnerTests, ' ') --tests PassingTest --results-directory ./TestResults/WindowsTestFiler" WorkingDirectory="$(SolutionDir)" />
+
+    <Message Condition="'$(OS)' != 'Windows_NT'" Importance="High" Text="Skipping the running of docker related smoke tests on Linux (as these cannot work from within Jenkins). If this is NOT a Jenkins server then change the condition!"/>
+    <CallTarget Condition="'$(OS)' == 'Windows_NT'" Targets="RunDockerTest" />
+
+    <CallTarget Condition="'$(OS)' == 'Windows_NT'" Targets="RunTestRunnerInDocker" />
+
+  </Target>
+</Project>

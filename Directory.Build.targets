@@ -1,0 +1,13 @@
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)/NonTestProject.targets" Condition="'$(IsTestProject)' != 'true'" />
+
+  <!-- This is an unpleasant hack to get around the fact that test projects need publishing in order to be able to get code coverage or for netcoreapp 2.* test to even run. -->
+  <Target Name="PublishTestProjects" Condition="'$(IsTestProject)' == 'true'" AfterTargets="AfterBuild">
+    <Message Text="Publish $(AssemblyName) for $(TargetFramework)" Importance="high"/>
+
+    <MSBuild Projects="$(MSBuildProjectFile)"
+             Targets="Publish"
+             Properties="Configuration=$(Configuration);TargetFramework=$(TargetFramework);NoBuild=true"/>
+    
+  </Target>
+</Project>

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net5.0;net6.0;net7.0</TargetFrameworks>
+    <ToolCommandName>vstest-runner</ToolCommandName>
+    <PackAsTool>true</PackAsTool>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>VsTestRunner</PackageId>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Bulldog" Version="0.3.17" />
+    <PackageReference Include="KerberosUtils" Version="1.2.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VsTestRunner.Core\VsTestRunner.Core.csproj" />
+  </ItemGroup>
+</Project>

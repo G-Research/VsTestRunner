@@ -1,0 +1,9 @@
+{
+    "test-assemblies-file": "test-list.json",
+    "test-assemblies": ["assembly1", "assembly2"],
+    "clear-env-vars": true,
+    "docker-image": [ "my-working-image" ],
+    "include-categories": [ "Working" ],
+    "exclude-categories": [ "NotWorking" ],
+    "test-platform": "x64"
+}

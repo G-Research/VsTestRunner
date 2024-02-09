@@ -71,7 +71,7 @@ namespace VsTestRunner.Core
                 var excludedCategories = testOptions.ExcludeCategories;
 
                 filterClause += "(";
-                
+
                 for (int i = 0; i < excludedCategories.Count; i++)
                 {
                     filterClause += $"TestCategory!={excludedCategories[i]}";
@@ -103,7 +103,7 @@ namespace VsTestRunner.Core
                         filterClause += "|";
                     }
                 }
-                
+
                 filterClause += ")";
             }
 

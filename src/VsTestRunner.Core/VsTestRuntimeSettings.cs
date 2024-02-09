@@ -22,7 +22,7 @@ namespace VsTestRunner.Core
         public TimeSpan TestTimeout { get; }
         [JsonConverter(typeof(StringEnumConverter))]
         public TraceLevel TraceLevel { get; }
-        
+
         // Setting required by ArmadaTestRunner (path is different locally and on remote machine)
         public string RunSettings { get; set; }
 

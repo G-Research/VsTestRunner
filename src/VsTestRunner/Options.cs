@@ -44,7 +44,7 @@ namespace VsTestRunner
 
         public void PrintOptions()
         {
-             Log.Information($@"Command line options:
+            Log.Information($@"Command line options:
  * TestAssembliesCount    : {TestAssemblies.Count()}
  * TestAssembliesFile     : {TestAssemblyFile}
  - Tests                  : {String.Join(',', Tests)}
@@ -72,7 +72,7 @@ namespace VsTestRunner
     {
         public SettableOptions()
         {
-            MaxDegreeOfParallelism = (uint) Environment.ProcessorCount;
+            MaxDegreeOfParallelism = (uint)Environment.ProcessorCount;
             ResultsDirectory = Environment.CurrentDirectory;
             MetricsFile = $"{Guid.NewGuid()}.metrics";
         }
@@ -97,7 +97,7 @@ namespace VsTestRunner
 
         [JsonIgnore]
         private IEnumerable<string> _testAssemblies = new string[0];
-        
+
         [Option("test-assemblies-file", HelpText = "File containing the test assemblies to run tests for.")]
         [JsonProperty("test-assemblies-file")]
         public string TestAssemblyFile { get; set; }
@@ -130,10 +130,10 @@ namespace VsTestRunner
 
         [JsonIgnore]
         private IEnumerable<string> _environmentVariables = new string[0];
-        
+
         [Option("additional-mounts", SetName = "Docker", HelpText = "Space or colon delimited list of additional directories to mount into the docker image")]
         [JsonProperty("additional-mounts")]
-        public IEnumerable<string> AdditionalMounts 
+        public IEnumerable<string> AdditionalMounts
         {
             get { return _additionalMounts; }
             set

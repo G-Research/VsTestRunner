@@ -11,7 +11,7 @@ namespace VsTestRunner.Tests
     public class DummyTest
     {
         [Test]
-        public void PassingTest ()
+        public void PassingTest()
         {
             Assert.Pass();
         }

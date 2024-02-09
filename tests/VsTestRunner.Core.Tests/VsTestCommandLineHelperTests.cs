@@ -63,7 +63,7 @@ namespace VsTestRunner.Core.Tests
 
             TestOptions testOptions = new TestOptions(commandLineOptions);
             var commandline = VsTestCommandLineHelper.GetVsTestCommandLineArguments("MyTest", testOptions, "E:\\code", new System.IO.FileInfo("E:\\code\\MyTest.dll"));
-            commandline.Should().Contain("--Tests:MyExplicitTest1,MyExplicitTest2");            
+            commandline.Should().Contain("--Tests:MyExplicitTest1,MyExplicitTest2");
         }
 
 

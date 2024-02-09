@@ -11,7 +11,7 @@ namespace VsTestRunner.Core.Tests
         public void TestParsingEnvironmentVariablesAndAdditionalMounts()
         {
             var environmentOptions = new EnvironmentOptions(new TestOptions { DockerImage = new string[] { "my.docker.image" }, AdditionalMounts = new string[] { "E:\\myCode\\|/code", "E:\\another-mount|/foo" }, EnvironmentVariables = new string[] { "bob=foo" } });
-            environmentOptions.TryGetDockerImage("net5.0", out string dockerImage).Should().BeTrue(); 
+            environmentOptions.TryGetDockerImage("net5.0", out string dockerImage).Should().BeTrue();
             dockerImage.Should().Be("my.docker.image");
             environmentOptions.AdditionalMounts.Count.Should().Be(2);
             environmentOptions.AdditionalMounts[0].LocalDirectory.Should().Be("E:\\myCode\\");

@@ -43,13 +43,13 @@ namespace VsTestRunner.Core
                         _dockerImages.Add(image.Substring(0, index), image.Substring(index + 1));
                     }
                 }
-                
+
                 AdditionalMounts = SplitCommandLineVariable(options.AdditionalMounts, '|');
             }
         }
 
         private Dictionary<string, string> _dockerImages = new Dictionary<string, string>();
-        public bool TryGetDockerImage (string targetFramework, out string dockerImage)
+        public bool TryGetDockerImage(string targetFramework, out string dockerImage)
         {
             // Should this be Regex?
             if (_dockerImages.TryGetValue(targetFramework, out dockerImage))

@@ -2,7 +2,7 @@
 using Nuke.Common.Tools.DotNet;
 
 namespace VsTestRunner.Nuke
-{    
+{
     public enum CodeCoverageCollector
     {
         None,
@@ -37,7 +37,7 @@ namespace VsTestRunner.Nuke
         {
             if (value != null && value.Any())
             {
-                arguments.Add(argumentName); 
+                arguments.Add(argumentName);
                 arguments.Add(string.Join(separator, value)); // With some escaping??
             }
 
@@ -66,7 +66,7 @@ namespace VsTestRunner.Nuke
     ) ?? "vstest-runner";
         }
 
-        public VsTestRunnerSettings (string vstestRunnerPath)
+        public VsTestRunnerSettings(string vstestRunnerPath)
         {
             VsTestRunnerPath = vstestRunnerPath;
         }
@@ -83,7 +83,7 @@ namespace VsTestRunner.Nuke
         public int MaxConcurrentTests { get; set; }
 
         public IEnumerable<string>? DockerImage { get; set; }
-        
+
         public string? Filter { get; set; }
 
         public IList<string>? IncludeCategories { get; set; }

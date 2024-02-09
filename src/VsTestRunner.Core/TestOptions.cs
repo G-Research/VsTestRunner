@@ -24,7 +24,7 @@ namespace VsTestRunner.Core
             IncludeCategories = commandLineOptions.IncludeCategories;
             Filter = commandLineOptions.Filter;
 
-            if (commandLineOptions.Tests.Any() && 
+            if (commandLineOptions.Tests.Any() &&
                 (ExcludeCategories.Any() || IncludeCategories.Any() || !string.IsNullOrEmpty(Filter)))
             {
                 throw new ArgumentException(nameof(commandLineOptions.Tests), "Test and Filter options are mutually exclusive. Please rerun with single option selected.");

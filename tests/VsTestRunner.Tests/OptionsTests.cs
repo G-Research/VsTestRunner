@@ -17,7 +17,7 @@ namespace VsTestRunner.Tests
             Options options = new Options();
 
             options.DockerImage.Should().BeNullOrEmpty();
-            options.DockerImage = new string[] { "my-overriden-image"};
+            options.DockerImage = new string[] { "my-overriden-image" };
             options.DockerImage.Should().Contain("my-overriden-image");
 
             options.SettingsFile = Path.Join(TestContext.CurrentContext.TestDirectory, "test-options.json");

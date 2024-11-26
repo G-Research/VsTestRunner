@@ -65,3 +65,6 @@ To run you tests in a docker image supply `--docker-image [name]` command line o
 
 Versioned using NerdBank.GitVersioning
 
+## Security
+
+Please see our [security policy](https://github.com/G-Research/VsTestRunner/blob/main/SECURITY.md) for details on reporting security vulnerabilities.

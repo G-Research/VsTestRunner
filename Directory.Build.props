@@ -14,6 +14,6 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Use GitVersioning for nuget packages -->
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.143" PrivateAssets="All"/>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.7.112" PrivateAssets="All"/>
   </ItemGroup>
 </Project>
